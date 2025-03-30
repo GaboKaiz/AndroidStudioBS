@@ -8,29 +8,33 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.contactos.R
 import com.example.contactos.database.DatabaseHelper
 import android.content.Intent
+import android.widget.ImageButton
+import com.example.contactos.ui.MainActivity
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var DatabaseHelper: DatabaseHelper
+    private lateinit var databaseHelper: DatabaseHelper  // Corregido: primera letra en minúscula
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        DatabaseHelper = DatabaseHelper(this)
+        databaseHelper = DatabaseHelper(this) // Se mantiene correcto
 
-        val edtFullName = findViewById<EditText>(R.id.edtFullName)  // Campo único para nombre completo
+        val edtFullName = findViewById<EditText>(R.id.edtFullName)
         val edtPhone = findViewById<EditText>(R.id.edtPhone)
         val btnSave = findViewById<Button>(R.id.btnSave)
         val btnViewContacts = findViewById<Button>(R.id.btnViewContacts)
 
         btnSave.setOnClickListener {
-            val fullName = edtFullName.text.toString()
-            val phone = edtPhone.text.toString()
+            val fullName = edtFullName.text.toString().trim()
+            val phone = edtPhone.text.toString().trim()
 
             if (fullName.isNotEmpty() && phone.isNotEmpty()) {
-                val result = DatabaseHelper.addContact(fullName, phone)
+                val result = databaseHelper.addContact(fullName, phone)
                 if (result != -1L) {
                     Toast.makeText(this, "Contacto guardado", Toast.LENGTH_SHORT).show()
+                    edtFullName.text.clear()
+                    edtPhone.text.clear() // Limpia los campos después de guardar
                 } else {
                     Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show()
                 }
@@ -40,7 +44,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnViewContacts.setOnClickListener {
-            startActivity(Intent(this, ContactListActivity::class.java))
+            startActivity(Intent(this,Garabato::class.java))
         }
+
     }
 }
